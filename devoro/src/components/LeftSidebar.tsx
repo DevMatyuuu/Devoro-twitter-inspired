@@ -76,20 +76,18 @@ export default function LeftSidebar() {
             <img src={logoMobile} alt='devoro-logo' className='md:hidden h-20 lg:w-32 lg:h-24 sm:h-20 sm:w-28' />
             <img src={logo} alt='devoro-logo' className='hidden lg:block h-20  lg:w-40 lg:h-14 sm:h-20 sm:w-28' />
           </div>
-          <div className='flex flex-col gap-10'>
+          <div className='flex flex-col gap-10 h-full'>
             {sideLinks.map((links) => (
               <Link to={links.route} onClick={() => handleLinkClick(links.label)} key={links.id} className={`${activeLink === links.label ? 'bg-slate-400/30' : 'hover:bg-gray-500/10'} flex items-center gap-3 px-10 py-4 rounded-lg cursor-pointer`}>
                 <div className='text-purple-800'>{activeLink === links.label ? links.iconActive : links.icon}</div>
                 <span className='text-purple-800 text-start font-bold text-xl'>{links.label}</span>
               </Link>
             ))}
-          </div>
-          <div className='flex items-center gap-4 mt-[380px] w-[100%]'>
-            <div className='flex flex-col items-center'>
+            <div className='absolute bottom-10 right-8'>
+              <Tooltip content="Log out" className='bg-slate-800 text-white'>
+                  <TbLogout2 size={28} className='text-purple-900 cursor-pointer' onClick={setOpen}/>
+              </Tooltip>
             </div>
-            <Tooltip content="Log out" className='bg-slate-800 text-white'>
-                <TbLogout2 size={28} className='text-purple-900 cursor-pointer' onClick={setOpen}/>
-            </Tooltip>
           </div>
         </div>
       </div>

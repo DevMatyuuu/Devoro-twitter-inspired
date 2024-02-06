@@ -1,13 +1,15 @@
 import { DocumentData, QuerySnapshot, onSnapshot } from "firebase/firestore";
 import { useEffect, useState } from "react";
-import { postsCollection} from "./controller";
+import { feedPosts } from "./controller";
 import { auth } from "./firebase";
 
 interface post {
+  username?: string,
   uid?: string,
   id?: string,
   text?: string,
   timestamp?: string,
+  image?: string,
 }
 
 interface user {
@@ -44,7 +46,7 @@ export default function useFirestore() {
 
     useEffect(
       () => {
-      const unsubscribe = onSnapshot(postsCollection, (snapshot: QuerySnapshot<DocumentData>) => {
+      const unsubscribe = onSnapshot(feedPosts, (snapshot: QuerySnapshot<DocumentData>) => {
        setAllPost( 
         snapshot.docs.map((doc) => {
           return {

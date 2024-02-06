@@ -54,6 +54,7 @@ export default function Post() {
           setLoading(true);
 
           const docRef = await addDoc(collection(db, 'posts'), {
+            username: user?.email,
             uid: user?.uid,
             id: uuidv4(), 
             text: input,
@@ -78,38 +79,38 @@ export default function Post() {
         }
 
   return (
-    <div className='w-full z-50'>
+    <div className='w-[95%] z-40'>
         <div className='flex flex-col gap-3 justify-center h-auto mt-24 border border-black/20 rounded-xl'>
-            <div className='flex flex-col px-7 '>
+            <div className='flex flex-col px-7'>
              <textarea rows={Number('2')} cols={Number('70')} value={input} onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setInput(e.target.value)} className='mt-5 h-20 w-full resize-none rounded-xl bg-transparent py-3 focus: outline-none' contentEditable placeholder='Share your thoughts...'></textarea>
              {media && (
                   <div className='relative'>
-                  <div onClick={() => setMedia(null)} className='absolute w-8 h-8 bg-[#15181c] hover:bg-[#272c26] bg-opacity-75 rounded-full flex items-center justify-center top-1 left-[280px] cursor pointer'>
+                  <div onClick={() => setMedia(null)} className='absolute w-8 h-8  bg-[#15181c] hover:bg-[#272c26] bg-opacity-75 rounded-full flex items-center justify-center top-1 left-[280px] cursor pointer'>
                     <IoClose className='text-white h-5 cursor-pointer'/>
                   </div>
-                  <img src={media} alt='' className='rounded-xl max-h-80 object-contain w-80'/>
+                  <img src={media} alt='' className='rounded-xl max-h-80 object-contain w-80 z-0'/>
                 </div>
                 )}
             </div>
-             <div className='px-7 mb-3 flex justify-between items-center'>
-              <div className='flex items-center gap-2'>
-                <Tooltip content='Media' clssName='px-3'>
+             <div className='px-7 mb-3 flex justify-between items-center z-50'>
+              <div className='flex items-center gap-4'>
+                <Tooltip content='Media' className='px-3 z-50'>
                         <div onClick={() => filePickerRef.current.click()}>
                             <FaImage size={24} className='text-black/50 hover:text-purple-900 cursor-pointer'/>
                             <input ref={filePickerRef} onChange={addImageToPost} type='file' id='file' hidden />
                         </div>
                 </Tooltip>
-                 <Tooltip content='Location'>
+                 <Tooltip content='Location' className='z-50'>
                         <div>
                           <IoLocationSharp size={24} className='text-black/50 hover:text-purple-900 cursor-pointer'/>
                         </div>
                   </Tooltip>
-                 <Tooltip content='Emoji'>
+                 <Tooltip content='Emoji' className='z-50'>
                         <div onClick={() => setEmoji(!emoji)}>
                           <MdEmojiEmotions size={24} className='text-black/50 hover:text-purple-900 cursor-pointer'/>
                         </div>
                 </Tooltip>
-                <Tooltip content='Calendar'>
+                <Tooltip content='Calendar' className='z-50'>
                         <FaCalendarAlt size={20} className='text-black/50 hover:text-purple-900 cursor-pointer'/>
                 </Tooltip>
                 </div>

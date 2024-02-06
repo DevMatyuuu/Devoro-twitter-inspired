@@ -5,7 +5,7 @@ export default function Search() {
   return (
     <div>
       <div className='flex justify-center items-center gap-3'>
-        <input type='text' className='relative py-2 px-4 rounded-md w-full' placeholder='Search'/>
+        <input type='text' className='relative py-2 px-4 rounded-md w-full border border-black/15' placeholder='Search'/>
         <FaSearch size={20} className='absolute right-5 cursor-pointer'/>
       </div>
     </div>

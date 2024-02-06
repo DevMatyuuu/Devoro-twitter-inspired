@@ -53,9 +53,9 @@ export default function Login() {
     
     return (
         <div>
-            <div className='flex justify-center items-center h-screen'>
+            <div className='flex justify-center items-center h-screen bg-white z-50'>
             <div className='flex h-[500px] xl:h-[600px] lg:h-[500px] md:h-[500px] shadow-2xl rounded-xl'>
-              <div className='justify-center flex flex-col py-24'>
+              <div className='justify-center flex flex-col py-24 bg-white/70 rounded-l-2xl'>
                 <form onSubmit={handleSubmit} className='flex flex-col w-[400px] lg:w-[550px] md:w-[350px] h-full items-center mb-10 rounded-xl md:rounded-r-none'>
                       <img src={logo} alt='devoro-logo' className='h-32 w-40 mb-5'/>
                       <div className='flex items-center flex-col gap-5 w-full'>
