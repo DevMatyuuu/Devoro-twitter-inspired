@@ -13,13 +13,13 @@ import { TbLogout2 } from "react-icons/tb";
 import useModalStore from '../store/modalStore'
 import { Tooltip } from "@material-tailwind/react";
 import { Link } from 'react-router-dom';
-import useFirestore from '../firebase/useFirestore';
+import useFirestore from '../../hooks/useFirestore';
 
 
 export default function LeftSidebar() {
   const { user } = useFirestore();
 
-  const setOpen = useModalStore((state) => state.setOpen);
+  const setLogoutOpen = useModalStore((state) => state.setLogoutOpen);
 
   const storedActive = JSON.parse(localStorage.getItem('active') as string);
 
@@ -85,7 +85,7 @@ export default function LeftSidebar() {
             ))}
             <div className='absolute bottom-10 right-8'>
               <Tooltip content="Log out" className='bg-slate-800 text-white'>
-                  <TbLogout2 size={28} className='text-purple-900 cursor-pointer' onClick={setOpen}/>
+                  <TbLogout2 size={28} className='text-purple-900 cursor-pointer' onClick={setLogoutOpen}/>
               </Tooltip>
             </div>
           </div>

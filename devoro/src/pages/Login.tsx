@@ -88,7 +88,7 @@ export default function Login() {
                       <button type='submit' onClick={signIn} className='bg-purple-900 py-2 px-28 rounded-md font-semibold hover:bg-purple-700 text-white'>Log in</button>
                   </form>
                   <div className='flex justify-center flex-col items-center text-center gap-5 w-[50%] mx-auto'>
-                      <div className='flex items-center gap-1 text-sm w-[101%] justify-between'>
+                      <div className='flex items-center text-sm w-[95%] justify-between'>
                           <span>Don't have an account yet?</span>
                           <Link to={'/signup'} className='text-purple-900 underline hover:font-normal'>Register Now!</Link>
                       </div>

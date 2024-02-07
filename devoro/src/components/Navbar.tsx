@@ -1,5 +1,5 @@
 import { IoNotificationsOutline } from "react-icons/io5";
-import useFirestore from "../firebase/useFirestore";
+import useFirestore from "../../hooks/useFirestore";
 
 
 export default function Navbar() {

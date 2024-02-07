@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import useFirestore from '../firebase/useFirestore'
+import useFirestore from '../../hooks/useFirestore'
 import avatar from '../assets/avatar.png'
 import { LuImagePlus } from "react-icons/lu";
 import { Tooltip } from '@material-tailwind/react';

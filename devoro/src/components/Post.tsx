@@ -13,13 +13,15 @@ import { db, storage } from '../firebase/firebase';
 import {
   addDoc,
   collection,
+  deleteDoc,
   doc,
   serverTimestamp,
   updateDoc,
 } from 'firebase/firestore';
 import { getDownloadURL, ref, uploadString, } from 'firebase/storage';
 import { v4 as uuidv4 } from 'uuid';
-import useFirestore from '../firebase/useFirestore';
+import useFirestore from '../../hooks/useFirestore';
+
 
 
 export default function Post() {
@@ -77,7 +79,7 @@ export default function Post() {
           setMedia(null);
           setEmoji(false);
         }
-
+  
   return (
     <div className='w-[95%] z-40'>
         <div className='flex flex-col gap-3 justify-center h-auto mt-24 border border-black/20 rounded-xl'>

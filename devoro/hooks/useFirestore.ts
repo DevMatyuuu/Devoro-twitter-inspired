@@ -1,7 +1,7 @@
 import { DocumentData, QuerySnapshot, onSnapshot } from "firebase/firestore";
 import { useEffect, useState } from "react";
-import { feedPosts } from "./controller";
-import { auth } from "./firebase";
+import { feedPosts } from "../src/firebase/controller";
+import { auth } from "../src/firebase/firebase";
 
 interface post {
   username?: string,
