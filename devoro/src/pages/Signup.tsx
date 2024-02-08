@@ -63,31 +63,31 @@ export default function Signup() {
                             <div className='absolute right-[107px] top-2'>
                               {errors.email &&
                               <Tooltip content={errors.email}>
-                                        <RiErrorWarningFill size={24} className='text-red-800 cursor-help'/>
+                                    <RiErrorWarningFill size={24} className='text-red-800'/>
                               </Tooltip>
                               }     
                             </div>
                         </div>
                         <div className='flex relative w-full'>
                             <div className='flex tems-center gap-4 w-full justify-center'>
-                            <input onChange={handleChange} value={values.password} id="password" name="password" type='text' placeholder='Password' className='w-[50%] px-2 py-2 rounded-lg border border-black/30'/>
+                            <input onChange={handleChange} value={values.password} id="password" name="password" type='password' placeholder='Password' className='w-[50%] px-2 py-2 rounded-lg border border-black/30'/>
                             </div>
                             <div className='absolute right-[107px] top-2'>
                               {errors.password &&
                               <Tooltip content={errors.password}>
-                                        <RiErrorWarningFill size={24} className='text-red-800 cursor-help'/>
+                                        <RiErrorWarningFill size={24} className='text-red-800'/>
                               </Tooltip>
                               }     
                             </div>
                         </div>
                         <div className='flex relative mb-5 w-full'>
                             <div className='flex tems-center gap-4 w-full justify-center'>
-                            <input onChange={handleChange} value={values.cpassword} id="cpassword" name="cpassword" type='text' placeholder='Confirm Password' className='w-[50%] px-2 py-2 rounded-lg border border-black/30'/>
+                            <input onChange={handleChange} value={values.cpassword} id="cpassword" name="cpassword" type='password' placeholder='Confirm Password' className='w-[50%] px-2 py-2 rounded-lg border border-black/30'/>
                             </div>
                             <div className='absolute right-[107px] top-2'>
                               {errors.cpassword &&
                               <Tooltip content={errors.cpassword}>
-                                        <RiErrorWarningFill size={24} className='text-red-800 cursor-help'/>
+                                        <RiErrorWarningFill size={24} className='text-red-800'/>
                               </Tooltip>
                               }     
                             </div>
@@ -96,7 +96,7 @@ export default function Signup() {
                     <div className='flex flex-col items-center text-center gap-5 w-[50%]'>
                         <button type='submit' onClick={signup} className='bg-purple-900 py-2 px-24 w-full rounded-md font-semibold hover:bg-purple-700 text-white'>Sign up</button>
                         <div className='flex items-center gap-1 text-sm w-[110%] justify-center'>
-                            <span>Already have an account yet?</span>
+                            <span>Already have an account?</span>
                             <Link to={'/login'} className='text-purple-900 underline hover:font-normal'>Login</Link>
                         </div>
                     </div>

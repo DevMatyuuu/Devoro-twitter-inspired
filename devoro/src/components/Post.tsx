@@ -13,7 +13,6 @@ import { db, storage } from '../firebase/firebase';
 import {
   addDoc,
   collection,
-  deleteDoc,
   doc,
   serverTimestamp,
   updateDoc,
@@ -25,7 +24,7 @@ import useFirestore from '../../hooks/useFirestore';
 
 
 export default function Post() {
-  const { input, setInput, media, setMedia, emoji, setEmoji, loading, setLoading} = usePostStore();
+  const { input, setInput, media, setMedia, emoji, setEmoji, loading, setLoading, url} = usePostStore();
 
   const { user } = useFirestore()
 
@@ -56,6 +55,7 @@ export default function Post() {
           setLoading(true);
 
           const docRef = await addDoc(collection(db, 'posts'), {
+            photoURL: url,
             username: user?.email,
             uid: user?.uid,
             id: uuidv4(), 

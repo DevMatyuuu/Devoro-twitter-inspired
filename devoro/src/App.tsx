@@ -10,7 +10,7 @@ import Messages from './pages/Messages';
 import useFirestore from '../hooks/useFirestore';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
-import DeleteModal from './components/deleteModal';
+import { Toaster } from "@/components/ui/toaster"
 
 export default function App() {
   const { user } = useFirestore();
@@ -45,10 +45,8 @@ export default function App() {
         <div className="z-50 fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
             <LogoutModal />  
         </div>
-        <div className="z-50 fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-            <DeleteModal />  
-        </div>
       </main>
+      <Toaster />
     </BrowserRouter>
     </>
   )

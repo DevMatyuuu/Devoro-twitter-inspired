@@ -1,28 +1,80 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import useFirestore from '../../hooks/useFirestore'
-import avatar from '../assets/avatar.png'
 import { LuImagePlus } from "react-icons/lu";
 import { Tooltip } from '@material-tailwind/react';
 import { BsThreeDots } from 'react-icons/bs';
 import { BiRepost } from 'react-icons/bi';
 import { FaRegComment } from 'react-icons/fa';
+import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
+import { storage } from '@/firebase/firebase';
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import usePostStore from '@/store/postStore';
+import Lottie from 'lottie-react';
+import loader from '../assets/loading.json'
+import useProfileStore from '@/store/profileStore';
+
 
 export default function Profile() {
-  const [picture, setPicture] = useState(avatar);
+  const [url, setUrl]  = usePostStore((state) => [state.url, state.setUrl])
+  const [profileLoading, setProfileLoading] = useProfileStore((state) => [state.profileLoading, state.setProfileLoading])
+  const [picture, setPicture] = useState<any>(null);
+  const [isFilePicked, setIsFilePicked] = useState(false);
   const { allPost, user } = useFirestore()
 
   const specificPost = allPost.filter(posts => posts.uid === user?.uid)
 
+  const filePickerRef = useRef<any>();
+
+  const handleAvatarChange = (e: any) => {
+    if (e.target.files && e.target.files[0]) {
+      setPicture(e.target.files[0]);
+      setIsFilePicked(true);
+      handleSubmit(e.target.files[0]);
+    }
+  }
+  
+  const handleSubmit = async (picture: File) => {
+    if (picture) {
+      const imageRef = ref(storage, 'image');
+      await uploadBytes(imageRef, picture)
+        .then(() => {
+          getDownloadURL(imageRef)
+            .then((url) => {
+              setProfileLoading(true)
+              setUrl(url);
+              setProfileLoading(true)
+              setIsFilePicked(false);
+            })
+            .catch((error) => {
+              console.log(error.message, 'error getting the image url');
+            });
+        })
+        .catch((error) => {
+          console.log(error.message);
+        });
+    }
+  };
+
+  
     return (
       <div className='flex flex-col gap-3 w-[90%] mx-auto mt-24 z-40'>
         <h1 className='text-4xl font-bold'>Profile</h1>
         <div className='flex gap-6 border items-center mx-auto w-full border-black/10 rounded-lg px-5 py-10'>
           <div className='flex items-center w-full'>
             <div className='flex relative mx-16'>
-              <img src={picture} alt='user-image' className='h-44 w-[350px] rounded-full shadow-2xl z-40'/>
+              <Avatar className='size-40'>
+                <AvatarImage src={url as string} alt='avatar' />
+                <AvatarFallback>
+                {profileLoading ? (
+                  <Lottie animationData={loader} className='h-20 w-20' />
+                  ) : (<img src={url as string} className='w-full'/>
+                )}
+                </AvatarFallback>
+              </Avatar>
               <Tooltip content='Upload Image' className='z-50'>
-                <button className='absolute right-4 bottom-0 py-3 px-3 rounded-full text-white bg-purple-800 hover:bg-purple-500 cursor-pointer z-50'>
+                <button onClick={() => filePickerRef.current.click()} disabled={isFilePicked} className='absolute right-4 bottom-0 py-3 px-3 rounded-full text-white bg-purple-800 hover:bg-purple-500 cursor-pointer z-50'>
                   <LuImagePlus />
+                  <input type="file" ref={filePickerRef} onChange={handleAvatarChange} id='file' hidden />
                 </button>
               </Tooltip>
             </div>
@@ -46,7 +98,7 @@ export default function Profile() {
             <div className='flex flex-col gap-2 mb-10 mt-2 bg-slate-200/40 px-5 py-5 rounded-xl'>
               <div className='flex justify-between mb-3'>
                 <div className='flex items-center gap-2'>
-                  <img src={avatar} className='size-11'/>
+                  <img src={url as string} className='size-11 rounded-full'/>
                   <span className='text-black/60'>{posts.username}</span>
                 </div>
                 <BsThreeDots className='size-6 hover:text-purple-900 cursor-pointer'/>

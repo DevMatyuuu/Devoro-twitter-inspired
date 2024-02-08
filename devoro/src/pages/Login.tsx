@@ -73,7 +73,7 @@ export default function Login() {
                           </div>
                           <div className='flex relative mb-1 w-full'>
                               <div className='flex tems-center gap-4 w-full justify-center'>
-                              <input onChange={handleChange} value={values.password} id="password" name="password" type='text' placeholder='Password' className='w-[50%] px-2 py-2 rounded-lg border border-black/30'/>
+                              <input onChange={handleChange} value={values.password} id="password" name="password" type='password' placeholder='Password' className='w-[50%] px-2 py-2 rounded-lg border border-black/30'/>
                               </div>
                               <div className='absolute right-[107px] top-2'>
                                 {errors.password &&

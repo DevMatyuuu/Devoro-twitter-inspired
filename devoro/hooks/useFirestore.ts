@@ -10,36 +10,31 @@ interface post {
   text?: string,
   timestamp?: string,
   image?: string,
+  photoURL?: string,
 }
 
 interface user {
   uid?: string,
   username?: string,
-  email: string | null,
+  email?: string | null,
   photoURL: string | null,
   password?: string
+  profilePic?: string | null,
 }
 
 export default function useFirestore() {
     const [allPost, setAllPost] = useState<post[]>([]);
     const [user, setUser] = useState<user | null>(null);
 
-    
-
-
     useEffect(() => {
       const unsubscribe = auth.onAuthStateChanged((user) => {
         if (user) {
-          // User is signed in.
-          const { email, photoURL, uid } = user;
-          setUser({ email, photoURL, uid });
+          const { email, photoURL, uid} = user;
+          setUser({ email, photoURL, uid});
         } else {
-          // No user is signed in.
           setUser(null);
         }
       });
-  
-      // Cleanup subscription on unmount
       return () => unsubscribe();
     }, []);
 
@@ -65,7 +60,7 @@ export default function useFirestore() {
   
     
 
-    return { user, allPost };
+    return { user, setUser, allPost };
   
 }
 
