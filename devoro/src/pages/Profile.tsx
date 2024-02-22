@@ -6,12 +6,24 @@ import { BsThreeDots } from 'react-icons/bs';
 import { BiRepost } from 'react-icons/bi';
 import { FaRegComment } from 'react-icons/fa';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
-import { storage } from '@/firebase/firebase';
+import { db, storage } from '@/firebase/firebase';
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import usePostStore from '@/store/postStore';
 import Lottie from 'lottie-react';
 import loader from '../assets/loading.json'
 import useProfileStore from '@/store/profileStore';
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { FaEdit } from "react-icons/fa";
+import { FaTrashCan } from "react-icons/fa6";
+import { collection, deleteDoc, doc, getDocs, query, serverTimestamp, setDoc, where } from 'firebase/firestore';
+import { toast } from '@/components/ui/use-toast';
+import { ToastAction } from '@radix-ui/react-toast';
+import noAvatar from '@/assets/avatar.png'
+import { useParams } from 'react-router-dom';
 
 
 export default function Profile() {
@@ -20,6 +32,9 @@ export default function Profile() {
   const [picture, setPicture] = useState<any>(null);
   const [isFilePicked, setIsFilePicked] = useState(false);
   const { allPost, user } = useFirestore()
+  const { uid } = useParams();
+  const paramsId = uid;
+
 
   const specificPost = allPost.filter(posts => posts.uid === user?.uid)
 
@@ -32,17 +47,18 @@ export default function Profile() {
       handleSubmit(e.target.files[0]);
     }
   }
-  
+
   const handleSubmit = async (picture: File) => {
     if (picture) {
-      const imageRef = ref(storage, 'image');
+      const imageRef = ref(storage, `images/${user?.uid}`);
+      console.log(imageRef)
       await uploadBytes(imageRef, picture)
         .then(() => {
           getDownloadURL(imageRef)
             .then((url) => {
               setProfileLoading(true)
               setUrl(url);
-              setProfileLoading(true)
+              setProfileLoading(false)
               setIsFilePicked(false);
             })
             .catch((error) => {
@@ -55,6 +71,30 @@ export default function Profile() {
     }
   };
 
+
+  const deletePost = async (id: string) => {
+    const q = query(collection(db, "posts"), where("id", "==", id));
+    const querySnapshot = await getDocs(q);
+    querySnapshot.forEach((doc) => {
+      const postData = { id: doc.id, ...doc.data() };
+      localStorage.setItem('deletedPost', JSON.stringify(postData));
+      deleteDoc(doc.ref);
+    });
+  }
+
+  
+  const undoDelete = async () => {
+    const deletedPostString = localStorage.getItem('deletedPost');
+    if (deletedPostString) {
+      let deletedPost = JSON.parse(deletedPostString);
+      deletedPost.timestamp = serverTimestamp();
+      await setDoc(doc(db, 'posts', deletedPost.id), deletedPost);
+    }
+  };
+
+  console.log(paramsId)
+
+  const avatar : string = `https://firebasestorage.googleapis.com/v0/b/devoro-412709.appspot.com/o/images%2F${user?.uid}?alt=media&token=a2c256bc-a000-4845-ad55-c0c022f046af`
   
     return (
       <div className='flex flex-col gap-3 w-[90%] mx-auto mt-24 z-40'>
@@ -62,8 +102,8 @@ export default function Profile() {
         <div className='flex gap-6 border items-center mx-auto w-full border-black/10 rounded-lg px-5 py-10'>
           <div className='flex items-center w-full'>
             <div className='flex relative mx-16'>
-              <Avatar className='size-40'>
-                <AvatarImage src={url as string} alt='avatar' />
+              <Avatar className='size-40 shadow-2xl'>
+                <AvatarImage src={user?.uid === paramsId ? noAvatar : avatar} alt='avatar'/>
                 <AvatarFallback>
                 {profileLoading ? (
                   <Lottie animationData={loader} className='h-20 w-20' />
@@ -97,11 +137,29 @@ export default function Profile() {
           <div key={posts.id}>
             <div className='flex flex-col gap-2 mb-10 mt-2 bg-slate-200/40 px-5 py-5 rounded-xl'>
               <div className='flex justify-between mb-3'>
-                <div className='flex items-center gap-2'>
+                <div className='flex items-center gap-3'>
                   <img src={url as string} className='size-11 rounded-full'/>
                   <span className='text-black/60'>{posts.username}</span>
                 </div>
-                <BsThreeDots className='size-6 hover:text-purple-900 cursor-pointer'/>
+                <Popover>
+                  <PopoverTrigger>
+                    <BsThreeDots className='size-6 hover:text-purple-900 cursor-pointer'/>
+                  </PopoverTrigger>
+                  <PopoverContent className='w-28 rounded-xl bg-white'>
+                    <div className='flex flex-col gap-1'>
+                      <button className='hover:bg-slate-500 hover:text-white px-2 py-1 rounded-[5px] cursor-pointer flex gap-1 items-center'>
+                        <FaEdit />
+                        <span>Edit</span>
+                      </button>
+                      <button 
+                        onClick={() => {deletePost(posts.id as string); toast({ title: "Post Deleted", description: "Do you want to undo this action?", action: (<ToastAction onClick={() => undoDelete()} altText="undo post">Undo</ToastAction> ),}) }} 
+                        className='hover:bg-red-700 hover:text-white px-2 py-1 rounded-[5px] cursor-pointer flex gap-1 items-center'>
+                        <FaTrashCan />
+                        <span>Delete</span>
+                      </button>
+                    </div> 
+                  </PopoverContent>
+                </Popover>
               </div>
               <div className='flex flex-col gap-5 px-14'>
                 <span className='break-all'>{posts.text}</span>

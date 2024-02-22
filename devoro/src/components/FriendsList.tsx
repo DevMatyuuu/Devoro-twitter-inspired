@@ -1,4 +1,3 @@
-import React from 'react'
 import { FaUserFriends } from "react-icons/fa";
 import SearchFriend from './SearchFriend';
 

@@ -20,14 +20,15 @@ import {
 import { getDownloadURL, ref, uploadString, } from 'firebase/storage';
 import { v4 as uuidv4 } from 'uuid';
 import useFirestore from '../../hooks/useFirestore';
+import useReactionStore from '@/store/reactionStore';
 
 
 
 export default function Post() {
-  const { input, setInput, media, setMedia, emoji, setEmoji, loading, setLoading, url} = usePostStore();
+  const { input, setInput, media, setMedia, emoji, setEmoji, loading, setLoading} = usePostStore();
+  const { heartCount } = useReactionStore()
 
   const { user } = useFirestore()
-
 
   const filePickerRef = useRef<any>();
 
@@ -55,12 +56,13 @@ export default function Post() {
           setLoading(true);
 
           const docRef = await addDoc(collection(db, 'posts'), {
-            photoURL: url,
+            photoURL: `https://firebasestorage.googleapis.com/v0/b/devoro-412709.appspot.com/o/images%2F${user?.uid}?alt=media&token=a2c256bc-a000-4845-ad55-c0c022f046af`,
             username: user?.email,
             uid: user?.uid,
             id: uuidv4(), 
             text: input,
             timestamp: serverTimestamp(),
+            heart: heartCount,
           });
 
           const imageRef = ref(storage, `posts/${docRef.id}/image`);

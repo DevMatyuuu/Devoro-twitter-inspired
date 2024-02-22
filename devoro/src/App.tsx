@@ -33,7 +33,7 @@ export default function App() {
             <Navbar />
               <Routes>
                 <Route path='/' element={<Home />} />
-                <Route path={`/profile/${user?.uid}`} element={<Profile />} />
+                <Route path={`/profile/:${user?.uid}`} element={<Profile />} />
                 <Route path='/bookmarks' element={<Bookmarks />} />
                 <Route path='/messages' element={<Messages />} />
               </Routes>

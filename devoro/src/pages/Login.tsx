@@ -10,7 +10,6 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Tooltip } from '@material-tailwind/react';
 
 
-
 interface LoginValues {
     email: string;
     password: string;
@@ -20,7 +19,6 @@ const initialValues = {
   email: '',
   password: '',
 }
-
 
 
 export default function Login() {

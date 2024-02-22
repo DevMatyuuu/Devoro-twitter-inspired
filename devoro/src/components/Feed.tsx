@@ -1,22 +1,19 @@
 import useFirestore from '../../hooks/useFirestore'
-import { BiRepost } from "react-icons/bi";
-import { FaRegComment } from "react-icons/fa";
 import { BsThreeDots } from "react-icons/bs";
 import { IoBookmarks } from "react-icons/io5";
-import avatar from '../assets/avatar.png'
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover"
+} from "@/components/ui/popover";
 import { FaEdit } from "react-icons/fa";
 import { FaTrashCan } from "react-icons/fa6";
 import { collection, deleteDoc, doc, getDocs, query, serverTimestamp, setDoc, where } from 'firebase/firestore';
 import { db } from '@/firebase/firebase';
 import { useToast } from "@/components/ui/use-toast"
 import { ToastAction } from './ui/toast';
-
-
+import noAvatar from '@/assets/avatar.png'
+import Reactions from './Reactions';
 
 export default function Feed() {
   const { allPost, user } = useFirestore();
@@ -49,8 +46,13 @@ export default function Feed() {
             <div className='flex flex-col gap-2 mb-5 mt-2 bg-slate-200/40 px-5 py-5 rounded-xl'>
               <div className='flex justify-between mb-3'>
                 <div className='flex items-center gap-3'>
-                  <img src={posts.photoURL as string} className='size-11 rounded-full'/>
-                  <span className='text-black/60'>{posts.username}</span>
+                  {posts.uid === user?.uid 
+                  ? 
+                  <img src={posts.photoURL} className='size-11 rounded-full'/> 
+                  : 
+                  <img src={posts.photoURL} className='size-11 rounded-full'/>} 
+                  {posts.uid === null ? <img src={noAvatar} className='size-11 rounded-full'/> : ''}         
+                  <span className='text-black/60 font-semibold'>{posts.username}</span>
                 </div>
                 <Popover>
                   <PopoverTrigger>
@@ -83,24 +85,7 @@ export default function Feed() {
                 <span className='break-all'>{posts.text}</span>
                 <img src={posts.image} className='w-full rounded-xl'/>
               </div>
-              <div className='flex items-center justify-center gap-12  mt-2'>
-                <div className='flex items-center gap-1 hover:text-purple-800 px-2 py-2 hover:bg-violet-200/60 rounded-full cursor-pointer'>
-                  <BiRepost className='size-6  cursor-pointer'/>
-                  <span className='text-sm'>56</span>
-                </div>
-                <div className='flex items-center gap-1 hover:text-green-800 px-3 py-2.5 hover:bg-green-200/60 rounded-full cursor-pointer'>
-                  <FaRegComment className='size-4'/>
-                  <span className='text-sm'>56</span>
-                </div>
-                <div className='flex items-center gap-1 hover:text-red-800 px-2 py-2 hover:bg-red-300/70 rounded-full cursor-pointer'>
-                  <BiRepost className='size-6'/>
-                  <span className='text-sm'>56</span>
-                </div>
-                <div className='flex items-center gap-1 hover:text-purple-800 px-2 py-2 hover:bg-violet-200/60 rounded-full cursor-pointer'>
-                  <BiRepost className='size-6'/>
-                  <span className='text-sm'>56</span>
-                </div>  
-              </div>
+              <Reactions posts = {posts}/>
             </div>
           </div>
           </>

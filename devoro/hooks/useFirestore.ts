@@ -1,7 +1,8 @@
 import { DocumentData, QuerySnapshot, onSnapshot } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { feedPosts } from "../src/firebase/controller";
-import { auth } from "../src/firebase/firebase";
+import { auth, db } from "../src/firebase/firebase";
+import { doc, getDoc } from "firebase/firestore";
 
 interface post {
   username?: string,
@@ -56,6 +57,23 @@ export default function useFirestore() {
   },
       []
     );
+
+    useEffect(() => {
+      const unsubscribe = auth.onAuthStateChanged(async (authUser) => {
+        if (authUser) {
+          const { email, uid } = authUser;
+          // Fetch the user document from Firestore
+          const userDoc = await getDoc(doc(db, 'users', uid));
+          const userData = userDoc.data();
+          // Get the avatar URL from the user document
+          const photoURL = userData?.photoURL;
+          setUser({ email, photoURL, uid });
+        } else {
+          setUser(null);
+        }
+      });
+      return () => unsubscribe();
+    }, []);
   
   
     
